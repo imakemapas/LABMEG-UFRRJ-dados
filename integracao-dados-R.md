@@ -5,7 +5,7 @@ Theresa Rocco P Barbosa
 
 # **Parte 1 - Plataforma [LabMeg](https://www.labmeg.com) - XLSX**
 
-<img src="amostras_macro_xlsx.png" width="300px" />
+<img src="imagens/amostras_macro_xlsx.png" width="300px" />
 
 ## Instalação e Importação de Pacotes no R
 
