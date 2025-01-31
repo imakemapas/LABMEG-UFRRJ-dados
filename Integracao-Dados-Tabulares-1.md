@@ -10,9 +10,9 @@
 2024-12-04
 
 
-# **Guia Prático de Manipulação e Integração de Dados no LabMeg/UFRRJ**
+## **Guia Prático de Manipulação e Integração de Dados no LabMeg/UFRRJ**
 
-## **Descrição do Tutorial**
+### **Descrição do Tutorial**
 
 Este tutorial apresenta um guia prático para boas práticas de manipulação e integração de dados no Laboratório de Modelagem e Evolução Geológica (LabMeg) da UFRRJ. Ele aborda desde a importação de planilhas Excel até a integração de informações utilizando o R, com foco em organização, padronização e automação de processos para garantir a qualidade e eficiência nas análises realizadas no laboratório.
 
