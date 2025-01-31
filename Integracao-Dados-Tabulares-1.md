@@ -14,7 +14,7 @@
 
 Este código apresenta um guia prático para boas práticas de manipulação e integração de dados no Laboratório de Modelagem e Evolução Geológica (LabMeg) da UFRRJ. Ele aborda desde a importação de planilhas Excel até a integração de informações utilizando o R, com foco em organização, padronização e automação de processos para garantir a qualidade e eficiência nas análises realizadas no laboratório.
 
-### **Estrutura do Tutorial**
+### **Estrutura do Fluxo de Trabalho**
 
 #### **Parte 1 - Manipulação de Dados Tabulares**
 
