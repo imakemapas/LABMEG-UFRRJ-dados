@@ -41,11 +41,11 @@ Este tutorial apresenta um guia prático para boas práticas de manipulação e 
 
 ---
 
-# **Parte 1 - Plataforma [LabMeg](https://www.labmeg.com) - XLSX**
+## **Parte 1 - Plataforma [LabMeg](https://www.labmeg.com) - XLSX**
 
 <img src="imagens/amostras_macro_xlsx.png" width="300px" />
 
-## Instalação e Importação de Pacotes no R
+### Instalação e Importação de Pacotes no R
 
 **1. Instalar os Pacotes Necessários**
 
@@ -73,7 +73,7 @@ library(DT)
 library(openxlsx)
 ```
 
-## Importar Dados de um Arquivo XLSX como DataFrames
+### Importar Dados de um Arquivo XLSX como DataFrames
 
 **1. Importar Arquivo XLSX com Várias Planilhas**
 
@@ -205,7 +205,7 @@ str(macro)
     ##  $ ...82                              : chr [1:116] NA NA NA NA ...
     ##  $ ...83                              : chr [1:116] NA NA NA NA ...
 
-## Seleção de Colunas Específicas de um DataFrame
+### Seleção de Colunas Específicas de um DataFrame
 
 Quando se trabalha com grandes conjuntos de dados, pode ser necessário
 selecionar apenas as colunas relevantes para análise. A função select()
@@ -251,7 +251,7 @@ macro <- macro |> dplyr::select(`Código da Amostra`,
 head(macro)
 ```
 
-## Renomeando Colunas em um DataFrame
+### Renomeando Colunas em um DataFrame
 
 Evitar acentos, espaços e caracteres especiais em nomes de colunas é uma
 boa prática de programação, pois aumenta a compatibilidade e
@@ -325,7 +325,7 @@ names(macro)    # Nomes das colunas atualizados para o DataFrame "macro"
 *Dica:* Use a função *janitor::clean_names()* do pacote *janitor* para
 renomear várias colunas de forma sistemática.
 
-## Integrando os DataFrames
+### Integrando os DataFrames
 
 Quando dois DataFrames compartilham uma coluna em comum, podemos uni-los
 para integrar informações.
@@ -400,7 +400,7 @@ names(amostras_macro)
 
     ## [1] "id_amostra" "id_pt"      "area"       "lito"       "grau_alt"   "natureza"   "estr_outr"
 
-## Exportando o novo DataFrame em XLSX
+### Exportando o novo DataFrame em XLSX
 
 A função *write.xlsx()* salva o DataFrame amostras_macro em um arquivo
 Excel no diretório especificado pelo caminho *output_path*.
