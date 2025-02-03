@@ -23,14 +23,12 @@ coordenadas ou até mesmo erros de digitação.
 Este código foi desenvolvido para enfrentar esses desafios, oferecendo
 uma solução que padroniza as coordenadas geográficas em formato decimal.
 O processo envolve a leitura dos dados a partir de uma planilha Excel,
-renomeando colunas e removendo linhas com valores ausentes. Correção de
-inconsistências nos símbolos utilizados nas coordenadas – como a
-substituição de vírgula por ponto e remoção de espaços desnecessários –
-além de tratar casos em que o ponto decimal pode estar ausente,
-convertendo números inteiros grandes no formato decimal esperado. O
-objeto final é salvo como um shapefile, garantindo que os dados
-espaciais integrados estejam prontos para análises geográficas complexas
-e mapeamentos.
+renomeando colunas e removendo linhas com valores ausentes. Remoção de
+espaços desnecessários – além de tratar casos em que o ponto decimal
+pode estar ausente, convertendo números inteiros grandes no formato
+decimal esperado. O objeto final é salvo como um shapefile, garantindo
+que os dados espaciais integrados estejam prontos para análises
+geográficas complexas e mapeamentos.
 
 O fluxo trabalho é dividido nas etapas:
 
@@ -53,9 +51,11 @@ library(stringr)     # Para manipulação de strings (texto)
 library(sf)          # Para trabalhar com dados espaciais
 ```
 
+##### **1. CARREGAMENTO E LIMPEZA DOS DADOS —————————————**
+
 ``` r
 # Leitura da planilha
-dft <- readxl::read_excel("tabela_grau_decimal.xlsx")
+dft <- readxl::read_excel("tabela_sem_ponto.xlsx")
 
 # Renomeia 
 dft <- dft |> 
@@ -65,25 +65,25 @@ dft <- dft |>
 dfc <- dft |> 
   dplyr::select(Sample_ID, Lat, Long) |> 
   na.exclude()
+```
 
+``` r
+# Checa numero de linhas noS dataframes inicial e com NA removidos.
 nrow(dft)
 ```
 
-    ## [1] 201
+    ## [1] 185
 
 ``` r
 nrow(dfc)
 ```
 
-    ## [1] 201
-
-###### **2. PADRONIZAÇÃO DE SÍMBOLOS E FORMATOS ———————————–**
+    ## [1] 185
 
 ``` r
 # Função para padronizar coordenadas
 padronizar_coordenadas <- function(coord) {
   coord <- as.character(coord) |>  
-    str_replace_all(",", ".") |>  # Substitui "," por "."
     str_trim()                    # Remove espaços extras
   
   # Adiciona ponto decimal se estiver ausente em valores numéricos grandes
@@ -104,12 +104,11 @@ dfc <- dfc |>
 str(dfc)
 ```
 
-    ## tibble [201 × 3] (S3: tbl_df/tbl/data.frame)
-    ##  $ Sample_ID: chr [1:201] "GB20A" "GB40BB" "GB18AC" "GB2AH" ...
-    ##  $ Lat      : Named num [1:201] -28.4 -28.4 -28.4 -28.4 -28.4 ...
-    ##   ..- attr(*, "names")= chr [1:201] "-28.36" "-28.36" "-28.36" "-28.36" ...
-    ##  $ Long     : Named num [1:201] -49.6 -49.6 -49.6 -49.6 -49.6 -49.6 -49.6 -49.6 -49.6 -49.6 ...
-    ##   ..- attr(*, "names")= chr [1:201] "-49.6" "-49.6" "-49.6" "-49.6" ...
+    ## tibble [185 × 3] (S3: tbl_df/tbl/data.frame)
+    ##  $ Sample_ID: chr [1:185] "JS01" "JS02" "JS03" "SJ04" ...
+    ##  $ Lat      : num [1:185] -29.4 -29.4 -29.4 -29.7 -29.7 ...
+    ##  $ Long     : Named num [1:185] -54.8 -54.8 -54.8 -53.8 -53.8 ...
+    ##   ..- attr(*, "names")= chr [1:185] "-547623" "-547623" "-547623" "-537729" ...
 
 ##### **3. EXPORTAÇÃO DOS DADOS CORRIGIDOS —————————————**
 
@@ -185,5 +184,5 @@ vect_ibge$Y <- coords[, 2]
 
 ``` r
 # Salva o objeto espacial como um shapefile
-terra::writeVector(vect_ibge, "grau_decimal_final.shp", overwrite = TRUE)
+terra::writeVector(vect_ibge, "grau_sem_ponto_final.shp", overwrite = TRUE)
 ```

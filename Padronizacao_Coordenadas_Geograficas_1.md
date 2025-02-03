@@ -1,15 +1,15 @@
 
-### 🌍 ─────────────────────────────────────────────── 🌍
+#### 🌍 ─────────────────────────────────────────────── 🌍
 
-### 🌍 THERESA ROCCO PEREIRA BARBOSA
+#### 🌍 THERESA ROCCO PEREIRA BARBOSA
 
-### 🌍 Brasileira \| Geocientista \| Dados
+#### 🌍 Brasileira \| Geocientista \| Dados
 
-### 🌍 <imakemapas@outlook.com.br> \| +55 24 998417085
+#### 🌍 <imakemapas@outlook.com.br> \| +55 24 998417085
 
-### 🌍 ─────────────────────────────────────────────── 🌍
+#### 🌍 ─────────────────────────────────────────────── 🌍
 
-### **INTEGRAÇÃO DE DADOS CIENTÍFICOS LEGADOS: PADRONIZAÇÃO DE COORDENADAS GEOGRÁFICAS**
+#### **INTEGRAÇÃO DE DADOS CIENTÍFICOS LEGADOS: PADRONIZAÇÃO DE COORDENADAS GEOGRÁFICAS**
 
 A integração de dados científicos legados, especialmente aqueles com
 informações georreferenciadas, apresenta desafios. Um dos problemas mais
