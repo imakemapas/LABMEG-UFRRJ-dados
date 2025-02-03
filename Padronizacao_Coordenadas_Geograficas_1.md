@@ -8,7 +8,6 @@
 ### 🌍 <imakemapas@outlook.com.br> \| +55 24 998417085
 
 ### 🌍 ─────────────────────────────────────────────── 🌍
-2025-01-04
 
 ### **INTEGRAÇÃO DE DADOS CIENTÍFICOS LEGADOS: PADRONIZAÇÃO DE COORDENADAS GEOGRÁFICAS**
 
@@ -26,9 +25,11 @@ minutos e segundos, graus decimais ou graus e minutos decimais), a
 correção de símbolos inconsistentes (como “º” em vez de “°”) e a
 conversão para um formato uniforme e utilizável. Além disso, o código
 realiza a limpeza de dados, removendo valores ausentes e corrigindo
-erros específicos, como coordenadas mal formatadas.
+erros específicos, como coordenadas mal formatadas. O objeto final é
+salvo como um shapefile, garantindo que os dados espaciais integrados
+estejam prontos para análises geográficas complexas e mapeamentos.
 
-O trabalho é dividido em etapas claras:
+O fluxo trabalho é dividido nas etapas:
 
 1.  Carregamento e limpeza dos dados
 2.  Padronização de símbolos e formatos
@@ -36,14 +37,11 @@ O trabalho é dividido em etapas claras:
 4.  Conversão para graus decimais
 5.  Exportação dos dados corrigidos
 
-Este processo não apenas resolve problemas imediatos de inconsistência
-de dados, mas também estabelece um fluxo de trabalho replicável para
-futuras integrações de dados georreferenciados, lembrando que cada caso
-é um caso e adaptações provavelmente precisão ser feitas.
-
-A combinação de técnicas de programação em R, como manipulação de
-strings e conversão de coordenadas, garante que os dados estejam prontos
-para uso em análises científicas e mapeamentos.
+A combinação de técnicas de manipulação de strings e transformação de
+coordenadas em R garante que os dados estejam padronizados e prontos
+para uso em estudos e aplicações geoespaciais. Este fluxo de trabalho
+torna o processo replicável, podendo ser adaptado a outros conjuntos de
+dados legados que enfrentem desafios semelhantes.
 
 ##### **0. CARREGAMENTO BIBLIOTECAS NECESSÁRIAS ———————————–**
 
@@ -57,19 +55,21 @@ library(sf)          # Para trabalhar com dados espaciais
 ##### **1. CARREGAMENTO E LIMPEZA DOS DADOS —————————————**
 
 ``` r
-# Lê os dados de uma planilha Excel
+# Leitura da planilha
 dft <- readxl::read_excel("tabela_grau_min_seg.xlsx")
 
-# Renomeia a coluna "Sample ID" para "Sample_ID" (remove o espaço no nome)
-dft <- dft |> dplyr::rename(Sample_ID = `Sample ID`)
+# Renomeia 
+dft <- dft |> 
+  dplyr::rename(Sample_ID = `Sample ID`)
 
-# Seleciona apenas as colunas relevantes para nosso objetivo: Sample_ID, Lat (latitude) e Long (longitude)
-dfc <- dft |> dplyr::select(Sample_ID, Lat, Long)
+# Renomeia e seleciona as colunas necessárias
+dfc <- dft |> 
+  dplyr::select(Sample_ID, Lat, Long) |> 
+  na.exclude()
+```
 
-# Remove linhas com valores ausentes (NA)
-dfc <- na.exclude(dfc)
-
-
+``` r
+# Checa numero de linhas noS dataframes inicial e com NA removidos.
 nrow(dft)
 ```
 
@@ -255,11 +255,11 @@ df_Unknown                <- dfc |> dplyr::filter(Lat_Format == "Unknown" & Long
 ```
 
 ``` r
-# Checa numero de linhas no dataframes distintos
-nrow(dft)
+# Checa numero de linhas nos dataframes distintos
+nrow(df_Unknown)
 ```
 
-    ## [1] 362
+    ## [1] 0
 
 ``` r
 nrow(dfc)
@@ -268,31 +268,7 @@ nrow(dfc)
     ## [1] 359
 
 ``` r
-nrow(df_gms)
-```
-
-    ## [1] 275
-
-``` r
-nrow(df_decimal)
-```
-
-    ## [1] 62
-
-``` r
-nrow(df_graus_minutos_decimais)
-```
-
-    ## [1] 22
-
-``` r
-nrow(df_Unknown)
-```
-
-    ## [1] 0
-
-``` r
-print(nrow(df_gms) +nrow(df_decimal) +nrow(df_graus_minutos_decimais))
+print(nrow(df_gms) +nrow(df_decimal) + nrow(df_graus_minutos_decimais))
 ```
 
     ## [1] 359
@@ -371,10 +347,9 @@ dff <- bind_rows(df_gms, df_decimal, df_graus_minutos_decimais)
 names(dft)
 ```
 
-    ##  [1] "Reference" "Sample_ID" "Lat"       "Long"      "SiO2"      "MgO"       "TiO2"     
-    ##  [8] "Al2O3"     "Fe2O3t"    "MnO"       "CaO"       "Na2O"      "K2O"       "P2O5"     
-    ## [15] "LOI"       "Fe2O3"     "FeO"       "Ba"        "Rb"        "Sr"        "Y"        
-    ## [22] "Zr"        "Ti"
+    ##  [1] "Reference" "Sample_ID" "Lat"       "Long"      "SiO2"      "MgO"       "TiO2"      "Al2O3"     "Fe2O3t"    "MnO"      
+    ## [11] "CaO"       "Na2O"      "K2O"       "P2O5"      "LOI"       "Fe2O3"     "FeO"       "Ba"        "Rb"        "Sr"       
+    ## [21] "Y"         "Zr"        "Ti"
 
 ``` r
 names(dff)
@@ -394,10 +369,9 @@ dft <- dft |>
 names(dft)
 ```
 
-    ##  [1] "Reference" "Sample_ID" "LATi"      "LONGi"     "SiO2"      "MgO"       "TiO2"     
-    ##  [8] "Al2O3"     "Fe2O3t"    "MnO"       "CaO"       "Na2O"      "K2O"       "P2O5"     
-    ## [15] "LOI"       "Fe2O3"     "FeO"       "Ba"        "Rb"        "Sr"        "Y"        
-    ## [22] "Zr"        "Ti"
+    ##  [1] "Reference" "Sample_ID" "LATi"      "LONGi"     "SiO2"      "MgO"       "TiO2"      "Al2O3"     "Fe2O3t"    "MnO"      
+    ## [11] "CaO"       "Na2O"      "K2O"       "P2O5"      "LOI"       "Fe2O3"     "FeO"       "Ba"        "Rb"        "Sr"       
+    ## [21] "Y"         "Zr"        "Ti"
 
 ``` r
 names(dff)
@@ -410,22 +384,20 @@ dff <- inner_join(dff, dft, by = "Sample_ID")
 names(dff)
 ```
 
-    ##  [1] "Sample_ID"   "LATf"        "LONGf"       "Lat_Format"  "Long_Format" "Reference"  
-    ##  [7] "LATi"        "LONGi"       "SiO2"        "MgO"         "TiO2"        "Al2O3"      
-    ## [13] "Fe2O3t"      "MnO"         "CaO"         "Na2O"        "K2O"         "P2O5"       
-    ## [19] "LOI"         "Fe2O3"       "FeO"         "Ba"          "Rb"          "Sr"         
-    ## [25] "Y"           "Zr"          "Ti"
+    ##  [1] "Sample_ID"   "LATf"        "LONGf"       "Lat_Format"  "Long_Format" "Reference"   "LATi"        "LONGi"       "SiO2"       
+    ## [10] "MgO"         "TiO2"        "Al2O3"       "Fe2O3t"      "MnO"         "CaO"         "Na2O"        "K2O"         "P2O5"       
+    ## [19] "LOI"         "Fe2O3"       "FeO"         "Ba"          "Rb"          "Sr"          "Y"           "Zr"          "Ti"
 
 ``` r
 dff <- dff |> dplyr::select(-c("Lat_Format", "Long_Format")) |> 
-  mutate(LATtemp = LATf, LONGtemp = LONGf)
+  dplyr::mutate(LATtemp = LATf, LONGtemp = LONGf)
 ```
 
 ``` r
-# Final CRS
-## The Brazilian Institute of Geography and Statistics (IBGE) recommends the Albers Equivalent Projection 
-## with SIRGAS2000 horizontal datum for the preservation and calculation of areas in Brazilian territory
-## Reference: 'Informações técnicas e legais para a utilização dos dados publicados' (IBGE, 2023) 
+# CRS Final
+## O Instituto Brasileiro de Geografia e Estatística (IBGE) recomenda a Projeção Equivalente de Albers 
+## com o datum horizontal SIRGAS2000 para a preservação e o cálculo de áreas no território brasileiro
+## Referência: 'Informações técnicas e legais para a utilização dos dados publicados' (IBGE, 2023) 
 ## https://biblioteca.ibge.gov.br/index.php/biblioteca-catalogo?view=detalhes&id=2101998 - Access in 2024 November
 final_crs <- 'PROJCS["Conica_Equivalente_de_Albers_Brasil",
     GEOGCS["GCS_SIRGAS2000",
