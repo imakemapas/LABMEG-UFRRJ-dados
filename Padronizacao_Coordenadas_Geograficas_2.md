@@ -7,9 +7,11 @@
 
 #### 🌍 <imakemapas@outlook.com.br> \| +55 24 998417085
 
+#### 🌍 2025-02-03
+
 #### 🌍 ─────────────────────────────────────────────── 🌍
 
-2025-02-03
+<br>
 
 ### **INTEGRAÇÃO DE DADOS CIENTÍFICOS LEGADOS: PADRONIZAÇÃO DE COORDENADAS GEOGRÁFICAS**
 
@@ -55,7 +57,7 @@ library(sf)          # Para trabalhar com dados espaciais
 
 ``` r
 # Leitura da planilha
-dft <- readxl::read_excel("tabela_grau_decimal.xlsx")
+dft <- readxl::read_excel("../raw_data/tabela_grau_decimal.xlsx")
 
 # Renomeia 
 dft <- dft |> 
@@ -125,9 +127,8 @@ dft <- dft |>
 names(dft)
 ```
 
-    ##  [1] "Reference" "Sample_ID" "LATi"      "LONGi"     "SiO2"      "MgO"       "TiO2"      "Al2O3"     "Fe2O3t"    "MnO"      
-    ## [11] "CaO"       "Na2O"      "K2O"       "P2O5"      "LOI"       "Fe2O3"     "FeO"       "Ba"        "Rb"        "Sr"       
-    ## [21] "Y"         "Zr"        "Ti"
+    ##  [1] "Reference" "Sample_ID" "LATi"      "LONGi"     "SiO2"      "MgO"       "TiO2"      "Al2O3"     "Fe2O3t"    "MnO"       "CaO"       "Na2O"      "K2O"      
+    ## [14] "P2O5"      "LOI"       "Fe2O3"     "FeO"       "Ba"        "Rb"        "Sr"        "Y"         "Zr"        "Ti"
 
 ``` r
 names(dff)
@@ -140,9 +141,8 @@ dff <- inner_join(dff, dft, by = "Sample_ID")
 names(dff)
 ```
 
-    ##  [1] "Sample_ID" "LATf"      "LONGf"     "Reference" "LATi"      "LONGi"     "SiO2"      "MgO"       "TiO2"      "Al2O3"    
-    ## [11] "Fe2O3t"    "MnO"       "CaO"       "Na2O"      "K2O"       "P2O5"      "LOI"       "Fe2O3"     "FeO"       "Ba"       
-    ## [21] "Rb"        "Sr"        "Y"         "Zr"        "Ti"
+    ##  [1] "Sample_ID" "LATf"      "LONGf"     "Reference" "LATi"      "LONGi"     "SiO2"      "MgO"       "TiO2"      "Al2O3"     "Fe2O3t"    "MnO"       "CaO"      
+    ## [14] "Na2O"      "K2O"       "P2O5"      "LOI"       "Fe2O3"     "FeO"       "Ba"        "Rb"        "Sr"        "Y"         "Zr"        "Ti"
 
 ``` r
 dff <- dff |> dplyr::mutate(LATtemp = LATf, LONGtemp = LONGf)
@@ -186,7 +186,7 @@ str(dff)
 dff <- dff |> 
   mutate(
     LOI = as.numeric(LOI)
-    )
+    ) |>  dplyr::rename(Itrio = Y)
 str(dff)
 ```
 
@@ -215,7 +215,7 @@ str(dff)
     ##  $ Ba       : num [1:201] 113 181 221 322 196 272 407 403 327 365 ...
     ##  $ Rb       : num [1:201] 15 9 22 35 10 46 50 41 58 35 ...
     ##  $ Sr       : num [1:201] 188 199 228 237 254 232 225 259 279 265 ...
-    ##  $ Y        : num [1:201] NA NA NA NA NA NA NA NA NA NA ...
+    ##  $ Itrio    : num [1:201] NA NA NA NA NA NA NA NA NA NA ...
     ##  $ Zr       : num [1:201] NA NA NA NA NA NA NA NA NA NA ...
     ##  $ Ti       : num [1:201] 4796 5396 5935 5216 8573 ...
     ##  $ LATtemp  : Named num [1:201] -28.4 -28.4 -28.4 -28.4 -28.4 ...
@@ -227,38 +227,30 @@ str(dff)
 summary(dff)
 ```
 
-    ##   Sample_ID              LATf            LONGf         Reference             LATi              LONGi                SiO2      
-    ##  Length:201         Min.   :-29.79   Min.   :-58.32   Length:201         Length:201         Length:201         Min.   :47.97  
-    ##  Class :character   1st Qu.:-28.36   1st Qu.:-49.85   Class :character   Class :character   Class :character   1st Qu.:50.91  
-    ##  Mode  :character   Median :-28.12   Median :-49.60   Mode  :character   Mode  :character   Mode  :character   Median :51.74  
-    ##                     Mean   :-24.59   Mean   :-43.57                                                            Mean   :52.91  
-    ##                     3rd Qu.:-27.60   3rd Qu.:-49.46                                                            3rd Qu.:53.44  
-    ##                     Max.   : 25.71   Max.   : 54.82                                                            Max.   :69.56  
-    ##                                                                                                                               
-    ##       MgO             TiO2           Al2O3           Fe2O3t           MnO              CaO             Na2O            K2O       
-    ##  Min.   :1.120   Min.   :0.800   Min.   :11.93   Min.   : 4.83   Min.   :0.0900   Min.   : 2.77   Min.   :1.810   Min.   :0.150  
-    ##  1st Qu.:4.320   1st Qu.:1.470   1st Qu.:13.26   1st Qu.:11.95   1st Qu.:0.1700   1st Qu.: 7.83   1st Qu.:2.500   1st Qu.:0.970  
-    ##  Median :4.610   Median :1.830   Median :13.65   Median :12.87   Median :0.1800   Median : 8.37   Median :2.670   Median :1.430  
-    ##  Mean   :4.601   Mean   :2.414   Mean   :13.84   Mean   :12.33   Mean   :0.1786   Mean   : 8.27   Mean   :2.712   Mean   :1.513  
-    ##  3rd Qu.:5.120   3rd Qu.:3.600   3rd Qu.:14.34   3rd Qu.:13.46   3rd Qu.:0.2000   3rd Qu.: 9.15   3rd Qu.:2.910   3rd Qu.:1.850  
-    ##  Max.   :8.530   Max.   :4.330   Max.   :16.75   Max.   :14.90   Max.   :0.2400   Max.   :11.61   Max.   :3.890   Max.   :4.190  
-    ##                                                                                                                                  
-    ##       P2O5             LOI              Fe2O3             FeO               Ba               Rb               Sr        
-    ##  Min.   :0.0700   Min.   :-0.0600   Min.   : 0.000   Min.   : 0.620   Min.   :  58.0   Min.   :  5.46   Min.   : 116.0  
-    ##  1st Qu.:0.2200   1st Qu.: 0.6625   1st Qu.: 4.400   1st Qu.: 4.765   1st Qu.: 336.0   1st Qu.: 23.00   1st Qu.: 228.0  
-    ##  Median :0.3000   Median : 1.0250   Median : 5.320   Median : 6.450   Median : 479.5   Median : 38.00   Median : 294.0  
-    ##  Mean   :0.3634   Mean   : 1.1366   Mean   : 6.163   Mean   : 6.098   Mean   : 481.3   Mean   : 44.39   Mean   : 448.8  
-    ##  3rd Qu.:0.5200   3rd Qu.: 1.4800   3rd Qu.: 6.800   3rd Qu.: 7.795   3rd Qu.: 611.2   3rd Qu.: 48.00   3rd Qu.: 701.0  
-    ##  Max.   :1.0500   Max.   : 4.2500   Max.   :15.080   Max.   :10.130   Max.   :1137.0   Max.   :186.00   Max.   :1050.0  
-    ##                   NA's   :3         NA's   :132      NA's   :139      NA's   :7                                         
-    ##        Y                Zr              Ti           LATtemp          LONGtemp     
-    ##  Min.   : 20.00   Min.   : 62.0   Min.   : 4796   Min.   :-29.79   Min.   :-58.32  
-    ##  1st Qu.: 32.00   1st Qu.:149.8   1st Qu.: 8978   1st Qu.:-28.36   1st Qu.:-49.85  
-    ##  Median : 38.00   Median :269.0   Median :11361   Median :-28.12   Median :-49.60  
-    ##  Mean   : 37.13   Mean   :235.5   Mean   :14837   Mean   :-24.59   Mean   :-43.57  
-    ##  3rd Qu.: 41.00   3rd Qu.:309.0   3rd Qu.:21642   3rd Qu.:-27.60   3rd Qu.:-49.46  
-    ##  Max.   :103.00   Max.   :499.0   Max.   :25959   Max.   : 25.71   Max.   : 54.82  
-    ##  NA's   :45       NA's   :45      NA's   :9
+    ##   Sample_ID              LATf            LONGf         Reference             LATi              LONGi                SiO2            MgO             TiO2      
+    ##  Length:201         Min.   :-29.79   Min.   :-58.32   Length:201         Length:201         Length:201         Min.   :47.97   Min.   :1.120   Min.   :0.800  
+    ##  Class :character   1st Qu.:-28.36   1st Qu.:-49.85   Class :character   Class :character   Class :character   1st Qu.:50.91   1st Qu.:4.320   1st Qu.:1.470  
+    ##  Mode  :character   Median :-28.12   Median :-49.60   Mode  :character   Mode  :character   Mode  :character   Median :51.74   Median :4.610   Median :1.830  
+    ##                     Mean   :-24.59   Mean   :-43.57                                                            Mean   :52.91   Mean   :4.601   Mean   :2.414  
+    ##                     3rd Qu.:-27.60   3rd Qu.:-49.46                                                            3rd Qu.:53.44   3rd Qu.:5.120   3rd Qu.:3.600  
+    ##                     Max.   : 25.71   Max.   : 54.82                                                            Max.   :69.56   Max.   :8.530   Max.   :4.330  
+    ##                                                                                                                                                               
+    ##      Al2O3           Fe2O3t           MnO              CaO             Na2O            K2O             P2O5             LOI              Fe2O3       
+    ##  Min.   :11.93   Min.   : 4.83   Min.   :0.0900   Min.   : 2.77   Min.   :1.810   Min.   :0.150   Min.   :0.0700   Min.   :-0.0600   Min.   : 0.000  
+    ##  1st Qu.:13.26   1st Qu.:11.95   1st Qu.:0.1700   1st Qu.: 7.83   1st Qu.:2.500   1st Qu.:0.970   1st Qu.:0.2200   1st Qu.: 0.6625   1st Qu.: 4.400  
+    ##  Median :13.65   Median :12.87   Median :0.1800   Median : 8.37   Median :2.670   Median :1.430   Median :0.3000   Median : 1.0250   Median : 5.320  
+    ##  Mean   :13.84   Mean   :12.33   Mean   :0.1786   Mean   : 8.27   Mean   :2.712   Mean   :1.513   Mean   :0.3634   Mean   : 1.1366   Mean   : 6.163  
+    ##  3rd Qu.:14.34   3rd Qu.:13.46   3rd Qu.:0.2000   3rd Qu.: 9.15   3rd Qu.:2.910   3rd Qu.:1.850   3rd Qu.:0.5200   3rd Qu.: 1.4800   3rd Qu.: 6.800  
+    ##  Max.   :16.75   Max.   :14.90   Max.   :0.2400   Max.   :11.61   Max.   :3.890   Max.   :4.190   Max.   :1.0500   Max.   : 4.2500   Max.   :15.080  
+    ##                                                                                                                    NA's   :3         NA's   :132     
+    ##       FeO               Ba               Rb               Sr             Itrio              Zr              Ti           LATtemp          LONGtemp     
+    ##  Min.   : 0.620   Min.   :  58.0   Min.   :  5.46   Min.   : 116.0   Min.   : 20.00   Min.   : 62.0   Min.   : 4796   Min.   :-29.79   Min.   :-58.32  
+    ##  1st Qu.: 4.765   1st Qu.: 336.0   1st Qu.: 23.00   1st Qu.: 228.0   1st Qu.: 32.00   1st Qu.:149.8   1st Qu.: 8978   1st Qu.:-28.36   1st Qu.:-49.85  
+    ##  Median : 6.450   Median : 479.5   Median : 38.00   Median : 294.0   Median : 38.00   Median :269.0   Median :11361   Median :-28.12   Median :-49.60  
+    ##  Mean   : 6.098   Mean   : 481.3   Mean   : 44.39   Mean   : 448.8   Mean   : 37.13   Mean   :235.5   Mean   :14837   Mean   :-24.59   Mean   :-43.57  
+    ##  3rd Qu.: 7.795   3rd Qu.: 611.2   3rd Qu.: 48.00   3rd Qu.: 701.0   3rd Qu.: 41.00   3rd Qu.:309.0   3rd Qu.:21642   3rd Qu.:-27.60   3rd Qu.:-49.46  
+    ##  Max.   :10.130   Max.   :1137.0   Max.   :186.00   Max.   :1050.0   Max.   :103.00   Max.   :499.0   Max.   :25959   Max.   : 25.71   Max.   : 54.82  
+    ##  NA's   :139      NA's   :7                                          NA's   :45       NA's   :45      NA's   :9
 
 ``` r
 # CRS Final
@@ -297,5 +289,5 @@ vect_ibge$Y <- coords[, 2]
 
 ``` r
 # Salva o objeto espacial como um shapefile
-terra::writeVector(vect_ibge, "grau_decimal_final.shp", overwrite = TRUE)
+terra::writeVector(vect_ibge, "../processed_data/grau_decimal_final.shp", overwrite = TRUE)
 ```
